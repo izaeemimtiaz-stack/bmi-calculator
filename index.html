@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BMI Pro - Health Calculator</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,Arial}
+
+body{
+background:linear-gradient(135deg,#0b1220,#111c33,#0b1220);
+color:#fff;
+min-height:100vh;
+}
+
+header{
+position:sticky;
+top:0;
+z-index:10;
+background:rgba(255,255,255,0.06);
+backdrop-filter:blur(12px);
+border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+.navbar{
+max-width:1100px;
+margin:auto;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 20px;
+}
+
+.logo{
+font-size:20px;
+font-weight:700;
+letter-spacing:1px;
+}
+
+.navbar a{
+color:#fff;
+text-decoration:none;
+margin-left:15px;
+font-size:14px;
+opacity:0.8;
+}
+
+.navbar a:hover{opacity:1}
+
+.hero{
+max-width:1100px;
+margin:40px auto;
+padding:0 20px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:30px;
+align-items:center;
+}
+
+.hero h1{font-size:42px;line-height:1.2;}
+.hero p{margin-top:10px;opacity:0.8;}
+
+.card{
+background:rgba(255,255,255,0.06);
+border:1px solid rgba(255,255,255,0.1);
+border-radius:20px;
+padding:20px;
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+
+input,select{
+width:100%;
+padding:12px;
+margin-top:10px;
+border-radius:12px;
+border:none;
+outline:none;
+background:rgba(255,255,255,0.9);
+font-size:14px;
+}
+
+button{
+width:100%;
+padding:12px;
+margin-top:15px;
+border:none;
+border-radius:12px;
+background:linear-gradient(135deg,#22c55e,#16a34a);
+color:white;
+font-weight:600;
+cursor:pointer;
+transition:0.3s;
+}
+button:hover{transform:scale(1.02);}
+
+.result{
+margin-top:15px;
+padding:15px;
+border-radius:15px;
+background:rgba(0,0,0,0.4);
+}
+
+.info{
+max-width:1100px;
+margin:40px auto;
+padding:0 20px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+}
+
+.box{
+background:rgba(255,255,255,0.05);
+padding:15px;
+border-radius:15px;
+}
+
+/* POLICY SECTION */
+.policy{
+max-width:1100px;
+margin:40px auto;
+padding:0 20px;
+}
+.policy h2{
+margin-bottom:10px;
+}
+.policy p{
+opacity:0.8;
+font-size:14px;
+line-height:1.6;
+margin-bottom:10px;
+}
+
+footer{
+text-align:center;
+padding:20px;
+opacity:0.6;
+margin-top:40px;
+border-top:1px solid rgba(255,255,255,0.1);
+}
+
+@media(max-width:900px){.hero{grid-template-columns:1fr;}}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="navbar">
+<div class="logo">BMI PRO</div>
+<div>
+<a href="#">Home</a>
+<a href="#calc">Calculator</a>
+<a href="#policy">Policy</a>
+</div>
+</div>
+</header>
+
+<section class="hero">
+<div>
+<h1>Professional BMI Calculator</h1>
+<p>Accurate BMI, Ideal Weight & Calories Calculator</p>
+</div>
+
+<div id="calc" class="card">
+<h3>Calculate BMI</h3>
+
+<select id="unitH">
+<option value="cm">Height (cm)</option>
+<option value="ft">Height (ft)</option>
+</select>
+
+<select id="unitW">
+<option value="kg">Weight (kg)</option>
+<option value="lbs">Weight (lbs)</option>
+</select>
+
+<input id="height" placeholder="Height">
+<input id="weight" placeholder="Weight">
+<input id="age" placeholder="Age">
+
+<select id="gender">
+<option value="male">Male</option>
+<option value="female">Female</option>
+</select>
+
+<button onclick="calcBMI()">Calculate</button>
+
+<div id="output" class="result" style="display:none"></div>
+</div>
+</section>
+
+<section class="info">
+<div class="box">Under 18.5 = Underweight</div>
+<div class="box">18.5 - 24.9 = Normal</div>
+<div class="box">25 - 29.9 = Overweight</div>
+<div class="box">30+ = Obese</div>
+</section>
+
+<!-- PRIVACY POLICY & TERMS -->
+<section class="policy" id="policy">
+<h2>Privacy Policy</h2>
+<p>This website does not store any personal data. All calculations are done in your browser and no data is sent to any server.</p>
+
+<h2>Terms & Conditions</h2>
+<p>This BMI calculator is for educational and informational purposes only. It is not a medical tool. Always consult a doctor for health advice.</p>
+
+<h2>Disclaimer</h2>
+<p>We are not responsible for any health decisions based on this calculator.</p>
+</section>
+
+<footer>
+© 2026 BMI Pro Calculator | All Rights Reserved
+</footer>
+
+<script>
+function calcBMI(){
+let h=parseFloat(document.getElementById("height").value);
+let w=parseFloat(document.getElementById("weight").value);
+let a=parseFloat(document.getElementById("age").value);
+
+let unitH=document.getElementById("unitH").value;
+let unitW=document.getElementById("unitW").value;
+let gender=document.getElementById("gender").value;
+
+if(isNaN(h)||isNaN(w))return;
+
+if(unitH==="cm") h=h/100;
+if(unitH==="ft") h=h*0.3048;
+if(unitW==="lbs") w=w*0.453592;
+
+let bmi=w/(h*h);
+let val=bmi.toFixed(1);
+
+let status="";
+let color="";
+
+if(bmi<18.5){status="Underweight";color="#60a5fa"}
+else if(bmi<25){status="Normal";color="#22c55e"}
+else if(bmi<30){status="Overweight";color="#f59e0b"}
+else{status="Obese";color="#ef4444"}
+
+let min=(18.5*h*h).toFixed(1);
+let max=(24.9*h*h).toFixed(1);
+
+let bmr=0;
+if(!isNaN(a)){
+if(gender==="male") bmr=10*w+6.25*(h*100)-5*a+5;
+else bmr=10*w+6.25*(h*100)-5*a-161;
+}
+
+bmr=Math.round(bmr);
+
+document.getElementById("output").style.display="block";
+document.getElementById("output").innerHTML=`
+<h2>Your BMI: ${val}</h2>
+<span style="color:${color}">${status}</span>
+<p>Ideal Weight: ${min} - ${max} kg</p>
+<p>Calories: ${bmr} kcal/day</p>
+`;
+}
+</script>
+
+</body>
+</html>
